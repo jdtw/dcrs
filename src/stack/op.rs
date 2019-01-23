@@ -6,6 +6,7 @@ use std::str::FromStr;
 #[derive(Debug)]
 pub enum Op {
     Stack(StackOp),
+    Reg(RegOp),
     Print(PrintOp),
     Calc(CalcOp),
     Cast(CastOp),
@@ -32,8 +33,7 @@ impl FromStr for Op {
 
             // Printing operations
             "p" => Op::Print(PrintOp::Print),
-            "l" => Op::Print(PrintOp::Dump(Grow::Down)),
-            "f" => Op::Print(PrintOp::Dump(Grow::Up)),
+            "f" => Op::Print(PrintOp::Dump),
             "o" => Op::Print(PrintOp::Output),
 
             // Stack operations
@@ -41,6 +41,12 @@ impl FromStr for Op {
             "d" => Op::Stack(StackOp::Dup),
             "c" => Op::Stack(StackOp::Clear),
             "r" => Op::Stack(StackOp::Rev),
+
+            // Register operations
+            "s" => Op::Reg(RegOp::Push),
+            "l" => Op::Reg(RegOp::Get),
+            "L" => Op::Reg(RegOp::Pop),
+            "F" => Op::Reg(RegOp::Dump),
 
             // Casting operations
             "u" => Op::Cast(CastOp::U),
@@ -71,6 +77,14 @@ pub enum CalcOp {
 }
 
 #[derive(Debug)]
+pub enum RegOp {
+    Push,
+    Get,
+    Pop,
+    Dump,
+}
+
+#[derive(Debug)]
 pub enum StackOp {
     Push(Val),
     Pop,
@@ -80,14 +94,8 @@ pub enum StackOp {
 }
 
 #[derive(Debug)]
-pub enum Grow {
-    Up,
-    Down,
-}
-
-#[derive(Debug)]
 pub enum PrintOp {
-    Dump(Grow),
+    Dump,
     Print,
     Output,
 }

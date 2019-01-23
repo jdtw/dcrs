@@ -7,8 +7,10 @@ use std::io;
 pub enum Error {
     InvalidInput(String),
     EndOfStack,
+    EndOfRegister(String),
     BadRadix,
     IoError(io::Error),
+    DivideByZero,
 }
 
 impl fmt::Display for Error {
@@ -17,8 +19,10 @@ impl fmt::Display for Error {
         match self {
             InvalidInput(s) => write!(f, "Invalid input: '{}'", s),
             EndOfStack => write!(f, "Stack is empty"),
+            EndOfRegister(id) => write!(f, "Register stack '{}' is empty", id.trim()),
             IoError(error) => write!(f, "IO Error: {}", error),
             BadRadix => write!(f, "Bad radix"),
+            DivideByZero => write!(f, "Attempt to divide by zero"),
         }
     }
 }

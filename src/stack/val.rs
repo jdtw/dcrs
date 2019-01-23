@@ -5,10 +5,19 @@ use std::ops;
 use std::str::FromStr;
 use Val::*;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Hash, Eq, PartialEq)]
 pub enum Val {
     U64(u64),
     I64(i64),
+}
+
+impl Val {
+    pub fn is_zero(&self) -> bool {
+        match self {
+            Val::U64(u) => *u == 0u64,
+            Val::I64(i) => *i == 0i64,
+        }
+    }
 }
 
 impl fmt::Display for Val {
@@ -203,12 +212,32 @@ impl ops::Div for Val {
     }
 }
 
+impl ops::Rem<Val> for u64 {
+    type Output = Val;
+    fn rem(self, rhs: Val) -> Val {
+        match rhs {
+            U64(u) => U64(self % u),
+            I64(i) => I64(self as i64 % i),
+        }
+    }
+}
+
+impl ops::Rem<Val> for i64 {
+    type Output = Val;
+    fn rem(self, rhs: Val) -> Val {
+        match rhs {
+            U64(u) => I64(self % u as i64),
+            I64(i) => I64(self % i),
+        }
+    }
+}
+
 impl ops::Rem for Val {
     type Output = Val;
     fn rem(self, rhs: Val) -> Val {
         match self {
-            U64(u) => u / rhs,
-            I64(i) => i / rhs,
+            U64(u) => u % rhs,
+            I64(i) => i % rhs,
         }
     }
 }
