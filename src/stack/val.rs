@@ -4,6 +4,7 @@ use std::fmt;
 use std::ops;
 use std::str::FromStr;
 use Val::*;
+use termion::style;
 
 #[derive(Debug, Clone, Hash, Eq, PartialEq)]
 pub enum Val {
@@ -23,8 +24,8 @@ impl Val {
 impl fmt::Display for Val {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            U64(u) => write!(f, "{: >20}u64", u),
-            I64(i) => write!(f, "{: >20}i64", i),
+            U64(u) => write!(f, "{}{: >20}{}u64", style::Bold, u, style::Reset),
+            I64(i) => write!(f, "{}{: >20}{}i64", style::Bold, i, style::Reset),
         }
     }
 }
@@ -32,8 +33,8 @@ impl fmt::Display for Val {
 impl fmt::LowerHex for Val {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            U64(u) => f.pad(&format!("0x{:0>16x}u64", u)),
-            I64(i) => f.pad(&format!("0x{:0>16x}i64", i)),
+            U64(u) => f.pad(&format!("0x{}{:0>16x}{}u64", style::Bold, u, style::Reset)),
+            I64(i) => f.pad(&format!("0x{}{:0>16x}{}i64", style::Bold, i, style::Reset)),
         }
     }
 }
@@ -41,8 +42,8 @@ impl fmt::LowerHex for Val {
 impl fmt::Binary for Val {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            U64(u) => f.pad(&format!("0b{:0>64b}u64", u)),
-            I64(i) => f.pad(&format!("0b{:0>64b}i64", i)),
+            U64(u) => f.pad(&format!("0b{}{:0>64b}{}u64", style::Bold, u, style::Reset)),
+            I64(i) => f.pad(&format!("0b{}{:0>64b}{}i64", style::Bold, i, style::Reset)),
         }
     }
 }
