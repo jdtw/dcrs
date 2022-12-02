@@ -2,7 +2,7 @@
 name = "dcrs"
 version = "0.1.0"
 authors = ["John Wood <j@jdtw.us>"]
-edition = "2018"
+edition = "2021"
 
 [dependencies]
-termion = "1.5.1"
+termion = "2.0.1"

@@ -3,8 +3,8 @@ use std::convert::From;
 use std::fmt;
 use std::ops;
 use std::str::FromStr;
-use Val::*;
 use termion::style;
+use Val::*;
 
 #[derive(Debug, Clone, Hash, Eq, PartialEq)]
 pub enum Val {
@@ -405,20 +405,20 @@ impl ops::Shr for Val {
 impl FromStr for Val {
     type Err = Error;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if s.starts_with("0b") {
-            if let Ok(u) = u64::from_str_radix(&s[2..], 2) {
+        if let Some(s) = s.strip_prefix("ob") {
+            if let Ok(u) = u64::from_str_radix(s, 2) {
                 return Ok(U64(u));
             }
-        } else if s.starts_with("-0b") {
-            if let Ok(i) = i64::from_str_radix(&s[3..], 2) {
+        } else if let Some(s) = s.strip_prefix("-0b") {
+            if let Ok(i) = i64::from_str_radix(s, 2) {
                 return Ok(I64(-i));
             }
-        } else if s.starts_with("0x") {
+        } else if let Some(s) = s.strip_prefix("0x") {
             if let Ok(u) = u64::from_str_radix(&s[2..], 16) {
                 return Ok(U64(u));
             }
-        } else if s.starts_with("-0x") {
-            if let Ok(i) = i64::from_str_radix(&s[3..], 16) {
+        } else if let Some(s) = s.strip_prefix("-0x") {
+            if let Ok(i) = i64::from_str_radix(s, 16) {
                 return Ok(I64(-i));
             }
         } else if let Ok(u) = s.parse::<u64>() {

@@ -9,7 +9,7 @@ pub enum Error {
     EndOfStack,
     EndOfRegister(String),
     BadRadix,
-    IoError(io::Error),
+    Io(io::Error),
     DivideByZero,
 }
 
@@ -20,7 +20,7 @@ impl fmt::Display for Error {
             InvalidInput(s) => write!(f, "Invalid input: '{}'", s),
             EndOfStack => write!(f, "Stack is empty"),
             EndOfRegister(id) => write!(f, "Register stack '{}' is empty", id.trim()),
-            IoError(error) => write!(f, "IO Error: {}", error),
+            Io(error) => write!(f, "IO Error: {}", error),
             BadRadix => write!(f, "Bad radix"),
             DivideByZero => write!(f, "Attempt to divide by zero"),
         }
@@ -31,6 +31,6 @@ impl error::Error for Error {}
 
 impl From<io::Error> for Error {
     fn from(error: io::Error) -> Error {
-        Error::IoError(error)
+        Error::Io(error)
     }
 }
