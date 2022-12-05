@@ -405,7 +405,7 @@ impl ops::Shr for Val {
 impl FromStr for Val {
     type Err = Error;
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if let Some(s) = s.strip_prefix("ob") {
+        if let Some(s) = s.strip_prefix("0b") {
             if let Ok(u) = u64::from_str_radix(s, 2) {
                 return Ok(U64(u));
             }
@@ -414,7 +414,7 @@ impl FromStr for Val {
                 return Ok(I64(-i));
             }
         } else if let Some(s) = s.strip_prefix("0x") {
-            if let Ok(u) = u64::from_str_radix(&s[2..], 16) {
+            if let Ok(u) = u64::from_str_radix(s, 16) {
                 return Ok(U64(u));
             }
         } else if let Some(s) = s.strip_prefix("-0x") {
